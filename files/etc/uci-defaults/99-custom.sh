@@ -16,7 +16,7 @@ SETTINGS_FILE="/etc/config/pppoe-settings"
 if [ ! -f "$SETTINGS_FILE" ]; then
     echo "PPPoE settings file not found. Skipping." >> $LOGFILE
 else
-   # 读取pppoe信息($enable_pppoe、$pppoe_account、$pppoe_password)
+   # 读取pppoe信息($enable_pppoe、$pppoe_account、$pppoe_password)  
    . "$SETTINGS_FILE"
 fi
 
@@ -45,7 +45,7 @@ elif [ "$count" -gt 1 ]; then
    # 剩余接口保留给LAN
    lan_ifnames=$(echo "$ifnames" | cut -d ' ' -f2-)
    # 设置WAN接口基础配置
-   uci set network.wan=interface
+   uci set network.wan=interface  
    # 提取第一个接口作为WAN
    uci set network.wan.device="$wan_ifname"
    # WAN接口默认DHCP
@@ -70,22 +70,22 @@ elif [ "$count" -gt 1 ]; then
    # LAN口设置静态IP
    uci set network.lan.proto='static'
    # 多网口设备 支持修改为别的ip地址
-   uci set network.lan.ipaddr='192.168.100.1'
+   uci set network.lan.ipaddr='192.168.2.11'        
    uci set network.lan.netmask='255.255.255.0'
    echo "set 192.168.100.1 at $(date)" >> $LOGFILE
    # 判断是否启用 PPPoE
    echo "print enable_pppoe value=== $enable_pppoe" >> $LOGFILE
    if [ "$enable_pppoe" = "yes" ]; then
-      echo "PPPoE is enabled at $(date)" >> $LOGFILE
+      echo "PPPoE is enabled at $(date)" >> $LOGFILE  
       # 设置ipv4宽带拨号信息
       uci set network.wan.proto='pppoe'
       uci set network.wan.username=$pppoe_account
-      uci set network.wan.password=$pppoe_password
+      uci set network.wan.password=$pppoe_password  
       uci set network.wan.peerdns='1'
       uci set network.wan.auto='1'
       # 设置ipv6 默认不配置协议
       uci set network.wan6.proto='none'
-      echo "PPPoE configuration completed successfully." >> $LOGFILE
+      echo "PPPoE configuration completed successfully." >> $LOGFILE    
    else
       echo "PPPoE is not enabled. Skipping configuration." >> $LOGFILE
    fi
